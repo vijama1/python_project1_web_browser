@@ -35,23 +35,37 @@ elif ch=='2':
     for i in done_data:
         #opens a new tab for the given query and performs searching of images
         a=webbrowser.open_new_tab("https://www.google.com/search?tbm=isch&q="+i)
-
+#
 elif ch=='3':
-    search_data=input("Enter the URL to be retrieved: ")
-    final_data=search_data.strip()
-    fin=final_data.split()
-    for i in final_data:
-        page = requests.get("https://www.google.dz/search?q="+i)
-        soup=BeautifulSoup(page.text,'html.parser')
-
-    for i in soup.find_all('a'):
+    data=input("Enter the url: ")
+    url="https://google.com/search?q="+data
+    #for i in search_data:
+    page=requests.get(url)
+        #print(page)
+    soup=BeautifulSoup(page.content,'html5lib')
+        #print(soup)
+    all_links=soup.find_all("a")
+    for i in all_links:
         #find all the values that starts with a
-        a=i.get('href').split('https://')
+
+        link_href=i.get('href')
+        #print(link_href)
+        if "url?q=" in link_href and not "webcache" in link_href :
+          #to replace url codes like ? as %3F and = as %3D as =
+          if "%3F" in link_href :
+            link_href=link_href.replace("%3F","?")
+          if "%3D" in link_href:
+            link_href=link_href.replace("%3D","=")
+          #removing /url?q= from the link
+          link_url=link_href.split('url?q=')[1]
+          #filtering usefull part of url
+          link_final=link_url.split('&sa=U')[0]
+          print(link_final)
         #splits data on the basis of https
-        for element in a:
+        #for element in a:
             #if any link starts with wikipedia then it prints it
-            if(element.startswith('en.wikipedia')):
-                print(element)
+            #if(element.startswith('en.wikipedia')):
+        #print(i)
 
 if ch=='4':
     #gives curren date and time
@@ -64,7 +78,7 @@ if ch=='4':
 
 if ch=='5':
     #opens the default web browser with new tab
-    webbrowser.open("https://")
+    webbrowser.get()
 
 if ch=='6':
     # gives the list of all the IP addresses that system has been assigned
@@ -84,10 +98,9 @@ if ch=='7':
     time.sleep(2)
     print(all_data_values)
     print("---------------------------------------------------------------------")
-    time.sleep(2)
-    str1 = ''.join(list1)'''
+    time.sleep(2)'''
     print(all_data)
     print("Name is:"+str(all_data.get("domain_name")))
     print("Email is:"+str(all_data.get("emails")))
-    print("Address is: "+str(all_data.get("address"))+","+str(all_data.get("city"))+","+str(all_data.get("state")))
+    print("Address is: "+str(all_data.get("address")))
     #print(type(list(whois("https://www."+url))))
